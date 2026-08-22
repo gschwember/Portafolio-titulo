@@ -40,7 +40,7 @@ const ConserjeProfile = () => {
   const quickActions = [
     {
       title: 'Ingreso Medidores',
-      desc: 'Registra el consumo mensual de agua y calefaccion.',
+      desc: 'Registra el consumo mensual de agua y calefacción.',
       path: APP_ROUTES.conserjeMedidores,
       icon: iconMeter,
       isPrimary: true,

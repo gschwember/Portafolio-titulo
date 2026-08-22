@@ -16,7 +16,7 @@ const UnauthorizedPage = () => {
           </svg>
         </div>
         <h1 className="text-2xl font-extrabold text-stone-900">Acceso no autorizado</h1>
-        <p className="mt-3 text-stone-600">Tu perfil no tiene permisos para acceder a este modulo.</p>
+        <p className="mt-3 text-stone-600">Tu perfil no tiene permisos para acceder a este módulo.</p>
         <Link to={APP_ROUTES.home} className="btn-primary mt-6 w-full">
           Volver al inicio
         </Link>

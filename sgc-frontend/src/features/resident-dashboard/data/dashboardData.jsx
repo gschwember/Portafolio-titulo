@@ -1,6 +1,6 @@
 import { APP_ROUTES } from '@app/routes'
 import { mapResident, residentMockList } from '@entities/resident/model/resident.model'
-import { paymentHistoryMock, paymentStatus } from '../../payments/model/payment.model'
+import { paymentStatus } from '../../payments/model/payment.model'
 
 // Items de menu para el rol "Residente".
 export const residentNavItems = [
@@ -29,7 +29,7 @@ const statusStyles = {
 
 // Columnas declarativas para DataTable (facil de reemplazar por payload de API).
 export const paymentHistoryColumns = [
-  { header: 'Periodo', accessor: 'periodo' },
+  { header: 'Período', accessor: 'periodo' },
   { header: 'Fecha de pago', accessor: 'fecha' },
   { header: 'Monto total', accessor: 'monto' },
   {
@@ -45,5 +45,3 @@ export const paymentHistoryColumns = [
   },
   { header: 'Comprobante', accessor: 'comprobante' },
 ]
-
-

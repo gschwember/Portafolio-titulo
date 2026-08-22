@@ -11,7 +11,7 @@ const RegisterPendingPage = () => {
         <>
           Ya tienes credenciales activas?{' '}
           <Link to={APP_ROUTES.login} className="text-amber-700 font-semibold hover:underline">
-            Ir a iniciar sesion
+            Ir a iniciar sesión
           </Link>
         </>
       }

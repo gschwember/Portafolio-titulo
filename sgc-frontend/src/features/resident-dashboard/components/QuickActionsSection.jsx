@@ -44,7 +44,7 @@ const QuickActionsSection = ({ onGoToReservations, onGoToPayments, onGoToHistory
         />
         <ActionCard
           title="Informar pago"
-          description="Sube el comprobante de tu transferencia para validacion."
+          description="Sube el comprobante de tu transferencia para validación."
           icon={iconUpload}
           isPrimary
           onClick={onGoToPayments}

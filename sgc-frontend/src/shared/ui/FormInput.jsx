@@ -49,7 +49,7 @@ const FormInput = ({
             onClick={() => setShowPassword((previous) => !previous)}
             disabled={disabled}
             className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-stone-400 transition-colors hover:text-stone-700"
-            aria-label={showPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'}
+            aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
           >
             {showPassword ? (
               <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">

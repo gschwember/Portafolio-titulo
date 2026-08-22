@@ -104,7 +104,7 @@ const EstadoCuenta = () => {
     doc.text(formatCurrencyCLP(selectedUnitData.amount), 135, 57)
 
     const tableData = [
-      ['Marzo 2026', 'Gasto comun - Periodo actual', formatCurrencyCLP(selectedUnitData.amount), 'Pendiente'],
+      ['Marzo 2026', 'Gasto común - Período actual', formatCurrencyCLP(selectedUnitData.amount), 'Pendiente'],
       ['Febrero 2026', 'Pago recibido - Transferencia', `+${formatCurrencyCLP(selectedUnitData.amount)}`, 'Aprobado'],
       ['Enero 2026', 'Pago recibido - Transferencia', `+${formatCurrencyCLP(selectedUnitData.amount)}`, 'Aprobado'],
     ]
@@ -122,7 +122,7 @@ const EstadoCuenta = () => {
     doc.setFontSize(8)
     doc.setTextColor(150, 150, 150)
     doc.text(
-      'Este documento es un comprobante informativo generado por el Sistema de Gestion de Condominios (SGC).',
+      'Este documento es un comprobante informativo generado por el Sistema de Gestión de Condominios (SGC).',
       pageWidth / 2,
       finalY + 20,
       { align: 'center' },
@@ -223,7 +223,7 @@ const EstadoCuenta = () => {
               <table className="w-full min-w-[560px] text-left text-sm">
                 <thead>
                   <tr className="border-b border-stone-200 text-[10px] font-bold uppercase text-stone-400">
-                    <th className="py-3">Periodo</th>
+                    <th className="py-3">Período</th>
                     <th className="py-3">Descripcion</th>
                     <th className="py-3">Monto</th>
                     <th className="py-3 text-right">Estado</th>

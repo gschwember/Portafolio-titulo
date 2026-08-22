@@ -11,7 +11,7 @@ const SuperAdminReservationsPage = () => {
     <DashboardLayout
       userRole="Super Administrador"
       userName={realName}
-      title="Gestion de Reservas"
+      title="Gestión de Reservas"
       navItems={superAdminNavItems}
     >
       <div className="max-w-7xl mx-auto pb-12">

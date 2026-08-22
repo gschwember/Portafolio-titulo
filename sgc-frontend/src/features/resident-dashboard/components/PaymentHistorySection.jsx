@@ -6,7 +6,7 @@ const PaymentHistorySection = ({
   sectionId = 'seccion-historial',
   isLoading = false,
   onRefresh,
-  emptyMessage = 'Aun no tienes pagos registrados en este periodo.',
+  emptyMessage = 'Aún no tienes pagos registrados en este período.',
 }) => {
   return (
     <section id={sectionId} className="lg:col-span-7">

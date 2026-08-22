@@ -2,7 +2,7 @@
 
 Backend de SGC construido con Django + Django REST Framework.
 
-Repositorio dedicado para API REST y logica de negocio. Actualmente enfocado en foundation de autenticacion para integracion con `sgc-frontend`.
+Este directorio contiene la API REST y la lógica de negocio del monorepo SGC.
 
 ## Estado actual
 
@@ -168,4 +168,4 @@ Notas de acceso:
 - `residente`: acceso acotado a su informacion (gastos comunes por sus unidades, pagos, comprobantes y reservas propias).
 
 Estado de pruebas:
-- Suite backend OK: `8 passed`.
+- Suite backend: `17 passed`.

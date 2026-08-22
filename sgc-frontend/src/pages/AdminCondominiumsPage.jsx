@@ -12,12 +12,12 @@ const AdminCondominiumsPage = () => {
     <DashboardLayout
       userRole="Administrador"
       userName={realName}
-      title="Gestion de Condominios"
+      title="Gestión de Condominios"
       navItems={adminNavItems}
     >
       <div className="max-w-7xl mx-auto pb-12">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-stone-900">Configuracion del Condominio</h2>
+          <h2 className="text-2xl font-bold text-stone-900">Configuración del Condominio</h2>
           <p className="mt-1 text-stone-500">Gestiona unidades, residentes y espacios comunes para el condominio activo.</p>
         </div>
         <CondominiumProvider>

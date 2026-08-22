@@ -106,7 +106,7 @@ const CondominiumManagementSection = () => {
         setResidentUsers([])
       }
     } catch (requestError) {
-      setError(requestError.message || 'No fue posible cargar la gestion de condominio.')
+      setError(requestError.message || 'No fue posible cargar la gestión de condominio.')
     } finally {
       setLoadingDetail(false)
     }
@@ -609,5 +609,4 @@ const CondominiumManagementSection = () => {
 }
 
 export default CondominiumManagementSection
-
 

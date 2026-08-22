@@ -241,7 +241,7 @@ const ReservationManagementSection = () => {
     <section className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden relative">
       <div className="px-6 py-5 border-b border-stone-200 flex flex-col gap-4 md:flex-row md:items-center md:justify-between bg-stone-50">
         <div>
-          <h3 className="text-lg font-bold text-stone-800">Gestion de reservas</h3>
+          <h3 className="text-lg font-bold text-stone-800">Gestión de reservas</h3>
           <p className="text-sm text-stone-500">Administra reservas de piscina, sala multiuso y gimnasio.</p>
         </div>
         <button

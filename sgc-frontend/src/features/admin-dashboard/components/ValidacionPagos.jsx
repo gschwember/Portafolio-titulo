@@ -67,7 +67,7 @@ const ValidacionPagos = () => {
       setUnits(Array.isArray(unitRows) ? unitRows : [])
       setReceipts(Array.isArray(receiptRows) ? receiptRows : [])
     } catch (requestError) {
-      setError(requestError.message || 'Error al cargar la gestion de pagos.')
+      setError(requestError.message || 'Error al cargar la gestión de pagos.')
     } finally {
       setLoading(false)
     }

@@ -12,12 +12,12 @@ const SuperAdminCondominiumsPage = () => {
     <DashboardLayout
       userRole="Super Administrador"
       userName={realName}
-      title="Gestion de Condominios"
+      title="Gestión de Condominios"
       navItems={superAdminNavItems}
     >
       <div className="max-w-7xl mx-auto pb-12">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-stone-900">Gestion Multi-Condominio</h2>
+          <h2 className="text-2xl font-bold text-stone-900">Gestión multicondominio</h2>
           <p className="mt-1 text-stone-500">Administra condominios, unidades, asignaciones de residentes y espacios comunes.</p>
         </div>
         <CondominiumProvider>

@@ -9,7 +9,6 @@ const CierreMes = () => {
   const { condominiums, activeCondominiumId, activeCondominium, setActiveCondominium } = useCondominium()
 
   const [step, setStep] = useState(1)
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [payments, setPayments] = useState([])
@@ -19,27 +18,24 @@ const CierreMes = () => {
   const loadImpactData = useCallback(async () => {
     if (!accessToken || !activeCondominiumId) return
 
-    setLoading(true)
-    setError('')
-
     try {
       const [paymentData, unitData, periodData] = await Promise.all([
         listPaymentsRequest(accessToken),
         listUnitsRequest(accessToken),
         listBillingPeriodsRequest(accessToken),
       ])
+      setError('')
       setPayments(Array.isArray(paymentData) ? paymentData : [])
       setUnits(Array.isArray(unitData) ? unitData : [])
       setPeriods(Array.isArray(periodData) ? periodData : [])
     } catch (requestError) {
       setError(requestError.message || 'No se pudo cargar el resumen de impacto.')
-    } finally {
-      setLoading(false)
     }
   }, [accessToken, activeCondominiumId])
 
   useEffect(() => {
-    loadImpactData()
+    const requestTimer = window.setTimeout(loadImpactData, 0)
+    return () => window.clearTimeout(requestTimer)
   }, [loadImpactData])
 
   const impactStats = useMemo(() => {
@@ -57,7 +53,7 @@ const CierreMes = () => {
     const currentPeriod = periods.find((period) => period.status !== 'closed')
     const periodLabel = currentPeriod
       ? `${currentPeriod.start_date || ''} - ${currentPeriod.end_date || ''}`.trim()
-      : 'Periodo actual'
+      : 'Período actual'
 
     return {
       activeUnits: condominiumUnits.length,
@@ -73,7 +69,7 @@ const CierreMes = () => {
     const currentPeriod = periods.find((period) => period.status === 'open')
     
     if (!currentPeriod) {
-      setError('No hay un periodo abierto para cerrar en este momento.')
+      setError('No hay un período abierto para cerrar en este momento.')
       return
     }
 
@@ -114,10 +110,10 @@ const CierreMes = () => {
         status: 'open'
       }, accessToken)
       
-      setSuccess('¡Primer periodo iniciado con éxito!')
+      setSuccess('¡Primer período iniciado con éxito!')
       await loadImpactData() 
     } catch (err) {
-      setError(err.message || 'Error al iniciar el periodo.')
+      setError(err.message || 'Error al iniciar el período.')
     }
   }
 
@@ -126,7 +122,7 @@ const CierreMes = () => {
   return (
     <div className="max-w-3xl space-y-6 animate-fade-in-up">
       <section className="surface-panel p-5">
-        <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-stone-900">Contexto de gestion</h3>
+        <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-stone-900">Contexto de gestión</h3>
         <select
           value={activeCondominiumId || ''}
           onChange={(event) => {
@@ -159,7 +155,7 @@ const CierreMes = () => {
           </div>
           <div>
             <h3 className="m-0 text-lg font-bold">
-              {activeCondominium ? `Cierre mensual: ${activeCondominium.name}` : 'Ejecucion de cierre'}
+              {activeCondominium ? `Cierre mensual: ${activeCondominium.name}` : 'Ejecución de cierre'}
             </h3>
             <p className="m-0 mt-1 text-sm text-stone-400">{impactStats.periodLabel}</p>
           </div>

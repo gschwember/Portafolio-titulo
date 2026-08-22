@@ -17,7 +17,7 @@ const RoleWelcomePage = ({ title, subtitle }) => {
           onClick={logout}
           className="mt-8 bg-stone-900 text-stone-50 px-5 py-2.5 rounded-lg font-semibold hover:bg-stone-800 transition-colors"
         >
-          Cerrar sesion
+          Cerrar sesión
         </button>
       </div>
     </div>

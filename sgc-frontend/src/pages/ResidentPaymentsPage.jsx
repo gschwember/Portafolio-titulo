@@ -104,7 +104,7 @@ const ResidentPaymentsPage = () => {
   const paymentHistoryColumns = useMemo(
     () => [
       { header: 'ID', accessor: 'id' },
-      { header: 'Periodo', accessor: 'periodLabel' },
+      { header: 'Período', accessor: 'periodLabel' },
       { header: 'Unidad', accessor: 'unitLabel' },
       { header: 'Fecha', accessor: 'paymentDate' },
       { header: 'Monto', accessor: 'amountLabel' },
@@ -243,7 +243,7 @@ const ResidentPaymentsPage = () => {
         accessToken,
       )
 
-      setFeedback('Comprobante enviado. Tu pago quedo en validacion.')
+      setFeedback('Comprobante enviado. Tu pago quedó en validación.')
       setFormData({
         expenseId: '',
         amount: '',
@@ -263,7 +263,7 @@ const ResidentPaymentsPage = () => {
     <DashboardLayout userRole="Residente" userName={realName} title="Pagos" navItems={residentNavItems}>
       <div className="max-w-7xl mx-auto pb-12">
         <header className="mb-8 mt-2">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-stone-900 tracking-tight">Gestion de pagos</h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-stone-900 tracking-tight">Gestión de pagos</h1>
           <p className="text-stone-600 mt-2 text-base">
             Administra tus transferencias y revisa el estado de tus comprobantes.
           </p>

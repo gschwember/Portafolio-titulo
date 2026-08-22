@@ -20,7 +20,7 @@ const ContactFormSection = () => {
 
       <form onSubmit={handleSubmit}>
         <FormInput
-          label="Correo electronico"
+          label="Correo electrónico"
           type="email"
           placeholder="juan@correo.com"
           value={email}

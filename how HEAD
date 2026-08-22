@@ -1,9 +1,0 @@
-[33mcommit 39f801a414d0014f628844a928da57b480ad0a87[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeat/filtro-condominios[m[33m)[m
-Merge: 08ec889 112e66f
-Author: crashgluck <136264877+crashgluck@users.noreply.github.com>
-Date:   Tue Apr 21 21:07:45 2026 -0400
-
-    Merge pull request #14 from crashgluck/feature/payments
-    
-    endpoints de payments funcionando
-

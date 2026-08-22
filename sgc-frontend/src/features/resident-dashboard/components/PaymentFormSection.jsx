@@ -103,7 +103,7 @@ const PaymentFormSection = ({
           disabled={isSubmitDisabled}
           className="btn-primary mt-4 w-full"
         >
-          {isSubmitting ? 'Enviando...' : 'Enviar a validacion'}
+          {isSubmitting ? 'Enviando...' : 'Enviar a validación'}
         </button>
       </form>
 

@@ -105,7 +105,7 @@ const DataTable = ({
         ) : safeData.length === 0 ? (
           <div className="rounded-xl border border-stone-200 bg-white px-4 py-8 text-center">
             <p className="m-0 text-sm font-semibold text-stone-800">{emptyMessage}</p>
-            <p className="m-0 mt-1 text-xs text-stone-500">No hay informacion para este filtro.</p>
+            <p className="m-0 mt-1 text-xs text-stone-500">No hay información para este filtro.</p>
           </div>
         ) : (
           safeData.map((row, rowIndex) => (

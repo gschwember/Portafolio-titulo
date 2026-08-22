@@ -8,15 +8,15 @@ const AuthLayout = ({ title, subtitle, children, footer }) => {
           <div className="surface-panel-soft p-9">
             <span className="status-chip border-amber-200 bg-amber-100 text-amber-800">Sistema SGC</span>
             <h2 className="mb-3 mt-4 text-4xl font-black leading-tight text-stone-900">
-              Gestion profesional para comunidades y condominios.
+              Gestión profesional para comunidades y condominios.
             </h2>
             <p className="m-0 text-base text-stone-600">
-              Controla pagos, reservas, usuarios y operacion diaria desde una sola plataforma segura.
+              Controla pagos, reservas, usuarios y operación diaria desde una sola plataforma segura.
             </p>
             <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
               <div className="rounded-xl border border-stone-200 bg-white p-3">
                 <p className="m-0 text-xs font-semibold uppercase tracking-wide text-stone-500">Pagos</p>
-                <p className="m-0 mt-1 font-bold text-stone-800">Validacion centralizada</p>
+                <p className="m-0 mt-1 font-bold text-stone-800">Validación centralizada</p>
               </div>
               <div className="rounded-xl border border-stone-200 bg-white p-3">
                 <p className="m-0 text-xs font-semibold uppercase tracking-wide text-stone-500">Reservas</p>

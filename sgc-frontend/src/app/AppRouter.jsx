@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes, Outlet } from 'react-router-dom'
 import ProtectedRoute from '@features/auth/guards/ProtectedRoute'
 import PublicOnlyRoute from '@features/auth/guards/PublicOnlyRoute'
@@ -5,40 +6,44 @@ import HomeRedirect from '@features/auth/guards/HomeRedirect'
 import { USER_ROLES } from '@features/auth/model/auth.constants'
 import { CondominiumProvider } from '@features/condominium-management/context/CondominiumProvider'
 
-// Imports de páginas
-import WelcomePage from '@pages/WelcomePage'
-
-import LoginPage from '@pages/LoginPage'
-import RegisterPage from '@pages/RegisterPage'
-import RegisterPendingPage from '@pages/RegisterPendingPage'
-
-import ResidentDashboardPage from '@pages/ResidentDashboardPage'
-import ResidentPaymentsPage from '@pages/ResidentPaymentsPage'
-import ResidentReservationsPage from '@pages/ResidentReservationsPage'
-
-import ConserjeDashboardPage from '@pages/ConserjeDashboardPage'
-import ConserjeMedidoresPage from '@pages/ConserjeMedidoresPage'
-import ConserjeReservationsPage from '@pages/ConserjeReservationsPage'
-
-import SuperAdminDashboardPage from '@pages/SuperAdminDashboardPage'
-import SuperAdminUsersPage from '@pages/SuperAdminUsersPage'
-
-import UnauthorizedPage from '@pages/UnauthorizedPage'
-
-import AdminDashboardPage from '@pages/AdminDashboardPage'
-import AdminResumenPage from '@pages/AdminResumenPage'
-import AdminPagosPage from '@pages/AdminPagosPage'
-import AdminEstadoCuentaPage from '@pages/AdminEstadoCuentaPage'
-import AdminCierreMesPage from '@pages/AdminCierreMesPage'
-import SuperAdminReservationsPage from '@pages/SuperAdminReservationsPage'
-import AdminCondominiumsPage from '@pages/AdminCondominiumsPage'
-import SuperAdminCondominiumsPage from '@pages/SuperAdminCondominiumsPage'
-import SuperAdminPaymentsPage from '@pages/SuperAdminPaymentsPage'
 import { APP_ROUTES } from './routes'
+
+const WelcomePage = lazy(() => import('@pages/WelcomePage'))
+const LoginPage = lazy(() => import('@pages/LoginPage'))
+const RegisterPage = lazy(() => import('@pages/RegisterPage'))
+const RegisterPendingPage = lazy(() => import('@pages/RegisterPendingPage'))
+const ResidentDashboardPage = lazy(() => import('@pages/ResidentDashboardPage'))
+const ResidentPaymentsPage = lazy(() => import('@pages/ResidentPaymentsPage'))
+const ResidentReservationsPage = lazy(() => import('@pages/ResidentReservationsPage'))
+const ConserjeDashboardPage = lazy(() => import('@pages/ConserjeDashboardPage'))
+const ConserjeMedidoresPage = lazy(() => import('@pages/ConserjeMedidoresPage'))
+const ConserjeReservationsPage = lazy(() => import('@pages/ConserjeReservationsPage'))
+const SuperAdminDashboardPage = lazy(() => import('@pages/SuperAdminDashboardPage'))
+const SuperAdminUsersPage = lazy(() => import('@pages/SuperAdminUsersPage'))
+const UnauthorizedPage = lazy(() => import('@pages/UnauthorizedPage'))
+const AdminDashboardPage = lazy(() => import('@pages/AdminDashboardPage'))
+const AdminResumenPage = lazy(() => import('@pages/AdminResumenPage'))
+const AdminPagosPage = lazy(() => import('@pages/AdminPagosPage'))
+const AdminEstadoCuentaPage = lazy(() => import('@pages/AdminEstadoCuentaPage'))
+const AdminCierreMesPage = lazy(() => import('@pages/AdminCierreMesPage'))
+const SuperAdminReservationsPage = lazy(() => import('@pages/SuperAdminReservationsPage'))
+const AdminCondominiumsPage = lazy(() => import('@pages/AdminCondominiumsPage'))
+const SuperAdminCondominiumsPage = lazy(() => import('@pages/SuperAdminCondominiumsPage'))
+const SuperAdminPaymentsPage = lazy(() => import('@pages/SuperAdminPaymentsPage'))
+
+const PageLoader = () => (
+  <div className="flex min-h-screen items-center justify-center bg-stone-50" role="status" aria-live="polite">
+    <div className="flex items-center gap-3 text-sm font-semibold text-stone-600">
+      <span className="h-5 w-5 animate-spin rounded-full border-2 border-stone-300 border-t-amber-600" />
+      Cargando módulo…
+    </div>
+  </div>
+)
 
 const AppRouter = () => {
   return (
-    <Routes>
+    <Suspense fallback={<PageLoader />}>
+      <Routes>
       <Route path={APP_ROUTES.home} element={<WelcomePage />} />
 
       <Route element={<PublicOnlyRoute />}>
@@ -93,7 +98,8 @@ const AppRouter = () => {
 
       <Route path={APP_ROUTES.unauthorized} element={<UnauthorizedPage />} />
       <Route path="*" element={<Navigate to={APP_ROUTES.home} replace />} />
-    </Routes>
+      </Routes>
+    </Suspense>
   )
 }
 

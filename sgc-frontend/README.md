@@ -2,7 +2,7 @@
 
 Frontend del Sistema Web de Gestion de Condominios (SGC), desarrollado con React + Vite.
 
-Este repositorio contiene solo frontend. El backend se encuentra en un proyecto separado (`sgc-backend`).
+Este directorio contiene el frontend del monorepo SGC. La API se encuentra en `../sgc-backend`.
 
 ## Estado actual
 

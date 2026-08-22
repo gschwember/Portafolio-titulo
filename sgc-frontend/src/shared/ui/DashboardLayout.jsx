@@ -274,7 +274,7 @@ const DashboardLayout = ({ children, userRole, userName, title, navItems = [] })
                       />
                     </svg>
                   </span>
-                  Cerrar sesion
+                  Cerrar sesión
                 </button>
               </div>
             </div>

@@ -1,14 +1,11 @@
 import { Link } from 'react-router-dom'
 import { APP_ROUTES } from '@app/routes'
-// Si tienes la imagen de fondo que usaste en el Dashboard, impórtala aquí. 
-// Si la ruta es diferente, ajústala.
 import backgroundImage from '../assets/condominio.jpg' 
 
 const WelcomePage = () => {
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col font-sans text-stone-900">
       
-      {/* --- NAVBAR PÚBLICO --- */}
       <header className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-stone-200 shadow-sm transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -36,12 +33,9 @@ const WelcomePage = () => {
         </div>
       </header>
 
-      {/* --- HERO SECTION --- */}
       <main className="flex-1 mt-20">
         <section className="relative w-full h-[600px] flex items-center justify-center overflow-hidden">
-          {/* Fondo con imagen y overlay */}
           <div className="absolute inset-0 z-0">
-            {/* Si no tienes la imagen disponible, puedes quitar la etiqueta <img> y dejar solo el div con gradiente */}
             <img src={backgroundImage} alt="Condominio" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-r from-stone-900/90 via-stone-900/70 to-transparent" />
           </div>
@@ -69,7 +63,6 @@ const WelcomePage = () => {
           </div>
         </section>
 
-        {/* --- FEATURES SECTION --- */}
         <section className="py-24 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
@@ -78,7 +71,6 @@ const WelcomePage = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Feature 1 */}
               <div className="bg-stone-50 p-8 rounded-2xl border border-stone-200 hover:border-amber-400 hover:shadow-lg transition-all group">
                 <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -87,7 +79,6 @@ const WelcomePage = () => {
                 <p className="text-stone-600 leading-relaxed">Paga tus gastos comunes en línea, revisa tu historial de transacciones y accede a los comprobantes de forma inmediata.</p>
               </div>
 
-              {/* Feature 2 */}
               <div className="bg-stone-50 p-8 rounded-2xl border border-stone-200 hover:border-amber-400 hover:shadow-lg transition-all group">
                 <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -96,7 +87,6 @@ const WelcomePage = () => {
                 <p className="text-stone-600 leading-relaxed">Agenda el quincho, la piscina o la multi-cancha con un par de clics. Sujeto a validación automática de deudas.</p>
               </div>
 
-              {/* Feature 3 */}
               <div className="bg-stone-50 p-8 rounded-2xl border border-stone-200 hover:border-amber-400 hover:shadow-lg transition-all group">
                 <div className="w-14 h-14 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
@@ -109,7 +99,6 @@ const WelcomePage = () => {
         </section>
       </main>
 
-      {/* --- FOOTER --- */}
       <footer className="bg-stone-950 text-stone-400 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
@@ -127,11 +116,20 @@ const WelcomePage = () => {
             </ul>
           </div>
           <div>
-            <h4 className="text-white font-bold mb-4">Soporte Técnico</h4>
+            <h4 className="text-white font-bold mb-4">Proyecto</h4>
             <ul className="space-y-2 text-sm">
-              <li>soporte@sgc-condominios.cl</li>
-              <li>+56 9 1234 5678</li>
-              <li>Santiago, Chile</li>
+              <li>Portafolio de Título</li>
+              <li>Analista Programador · Duoc UC</li>
+              <li>
+                <a
+                  href="https://github.com/gschwember/Portafolio-titulo"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-amber-500 transition-colors"
+                >
+                  Ver código fuente
+                </a>
+              </li>
             </ul>
           </div>
         </div>

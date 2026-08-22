@@ -1,0 +1,68 @@
+name: Quality checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    name: Frontend · lint and build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sgc-frontend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: sgc-frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Build production bundle
+        run: npm run build
+
+  backend:
+    name: Backend · checks and tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sgc-backend
+    env:
+      DJANGO_ENV: development
+      DJANGO_SECRET_KEY: ci-only-secret-key-with-at-least-32-characters
+      DJANGO_DEBUG: "False"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: sgc-backend/requirements/*.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements/dev.txt
+
+      - name: Run Django checks
+        run: python manage.py check
+
+      - name: Run test suite
+        run: python -m pytest
+

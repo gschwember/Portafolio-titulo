@@ -38,7 +38,7 @@ const LoginPage = () => {
         navigate(APP_ROUTES.registerPending, { replace: true })
         return
       }
-      setError(submitError.message || 'No fue posible iniciar sesion.')
+      setError(submitError.message || 'No fue posible iniciar sesión.')
     } finally {
       setIsSubmitting(false)
     }
@@ -46,13 +46,13 @@ const LoginPage = () => {
 
   return (
     <AuthLayout
-      title="Iniciar sesion"
+      title="Iniciar sesión"
       subtitle="Accede con tu cuenta para administrar tu condominio"
       footer={
         <>
-          No tienes cuenta?{' '}
+          ¿No tienes cuenta?{' '}
           <Link to={APP_ROUTES.register} className="text-amber-700 font-semibold hover:underline">
-            Registrate
+            Regístrate
           </Link>
         </>
       }
@@ -64,7 +64,7 @@ const LoginPage = () => {
           </div>
         )}
         <FormInput
-          label="Correo electronico"
+          label="Correo electrónico"
           type="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
@@ -72,11 +72,11 @@ const LoginPage = () => {
           required
         />
         <FormInput
-          label="Contrasena"
+          label="Contraseña"
           type="password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          placeholder="Tu contrasena"
+          placeholder="Tu contraseña"
           required
         />
 

@@ -29,7 +29,7 @@ const RegisterPage = () => {
     setError('')
 
     if (formData.password !== formData.passwordConfirmation) {
-      setError('Las contrasenas no coinciden.')
+      setError('Las contraseñas no coinciden.')
       return
     }
 
@@ -51,9 +51,9 @@ const RegisterPage = () => {
       subtitle="Registra tu acceso al portal SGC"
       footer={
         <>
-          Ya tienes cuenta?{' '}
+          ¿Ya tienes cuenta?{' '}
           <Link to={APP_ROUTES.login} className="text-amber-700 font-semibold hover:underline">
-            Inicia sesion
+            Inicia sesión
           </Link>
         </>
       }
@@ -81,7 +81,7 @@ const RegisterPage = () => {
           required
         />
         <FormInput
-          label="Correo electronico"
+          label="Correo electrónico"
           type="email"
           value={formData.email}
           onChange={handleChange('email')}
@@ -90,19 +90,19 @@ const RegisterPage = () => {
         />
 
         <FormInput
-          label="Contrasena"
+          label="Contraseña"
           type="password"
           value={formData.password}
           onChange={handleChange('password')}
-          placeholder="Minimo 6 caracteres, con letra y numero"
+          placeholder="Mínimo 6 caracteres, con letra y número"
           required
         />
         <FormInput
-          label="Confirmar contrasena"
+          label="Confirmar contraseña"
           type="password"
           value={formData.passwordConfirmation}
           onChange={handleChange('passwordConfirmation')}
-          placeholder="Repite tu contrasena"
+          placeholder="Repite tu contraseña"
           required
         />
 
