@@ -33,17 +33,7 @@ jobs:
         run: npm run lint
 
       - name: Build production bundle
-        shell: bash
-        run: |
-          set -o pipefail
-          npm run build 2>&1 | tee build-output.txt
-
-      - name: Report build failure
-        if: failure()
-        shell: bash
-        run: |
-          encoded_output="$(base64 -w 0 build-output.txt)"
-          echo "::error title=Frontend build output::$encoded_output"
+        run: npm run build
 
   backend:
     name: Backend · checks and tests
