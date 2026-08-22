@@ -42,12 +42,8 @@ jobs:
         if: failure()
         shell: bash
         run: |
-          while IFS= read -r line; do
-            line="${line//'%'/'%25'}"
-            line="${line//$'\r'/'%0D'}"
-            line="${line//$'\n'/'%0A'}"
-            echo "::error title=Frontend build::$line"
-          done < <(tail -n 30 build-output.txt)
+          encoded_output="$(base64 -w 0 build-output.txt)"
+          echo "::error title=Frontend build output::$encoded_output"
 
   backend:
     name: Backend · checks and tests
