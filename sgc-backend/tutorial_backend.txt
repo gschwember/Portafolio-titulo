@@ -1,0 +1,24 @@
+Clonar repositorio:
+git clone -b dev https://github.com/crashgluck/Portafolio-titulo.git
+
+Crear entorno virtual:
+python -m venv venv  
+
+Activar entorno virtual (venv):
+venv\Scripts\Activate   
+
+Instalar librerias desde requirements.txt:
+pip install -r requirements/base.txt 
+pip install -r requirements/dev.txt 
+
+Acceder a la carpeta backend:
+cd sgc-backend
+
+Ejecutar Entorno local:
+python manage.py runserver
+
+Hacer migracion de base de datos inicial:
+python manage.py makemigrations
+
+Ejecutar migracion:
+python manage.py migrate

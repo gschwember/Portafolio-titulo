@@ -1,0 +1,20 @@
+RESUMEN BREVE DE CAMBIOS APLICADOS (vs. version original)
+
+1) Se reemplazo la base inicial de Vite por una arquitectura real de proyecto.
+2) Se paso de App monolitica a rutas por feature con React Router:
+   - /resident/dashboard
+   - /resident/pagos
+   - /resident/perfil
+3) Se organizo el frontend por capas:
+   - app, pages, widgets, features, entities, shared
+4) El UI kit se movio a shared/ui y se dejaron archivos puente en src/components
+   para mantener compatibilidad.
+5) Se agregaron modelos base de dominio:
+   - residents (entidad)
+   - payments (feature)
+   - contact (feature)
+6) Se agrego cliente API base con timeout y config centralizada.
+7) Se incorporaron aliases de import (@app, @pages, @widgets, @features, @entities, @shared).
+8) Se actualizo README principal en español con estado actual, arquitectura y pasos.
+9) Se agregaron comentarios en archivos clave para facilitar onboarding y lectura.
+10) El backend se trabajara fuera de este repositorio (este repo queda solo frontend).

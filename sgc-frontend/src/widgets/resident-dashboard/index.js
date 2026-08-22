@@ -1,0 +1,5 @@
+export { default as ResidentOverviewSection } from '@features/resident-dashboard/components/ResidentOverviewSection'
+export { default as QuickActionsSection } from '@features/resident-dashboard/components/QuickActionsSection'
+export { default as PaymentFormSection } from '@features/resident-dashboard/components/PaymentFormSection'
+export { default as ContactFormSection } from '@features/resident-dashboard/components/ContactFormSection'
+export { default as PaymentHistorySection } from '@features/resident-dashboard/components/PaymentHistorySection'
