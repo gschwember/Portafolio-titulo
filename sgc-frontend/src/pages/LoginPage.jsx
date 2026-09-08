@@ -69,6 +69,7 @@ const LoginPage = () => {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           placeholder="usuario@correo.com"
+          autoComplete="email"
           required
         />
         <FormInput
@@ -77,6 +78,7 @@ const LoginPage = () => {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           placeholder="Tu contraseña"
+          autoComplete="current-password"
           required
         />
 

@@ -4,6 +4,7 @@ import AuthLayout from '@features/auth/components/AuthLayout'
 import useAuth from '@features/auth/hooks/useAuth'
 import FormInput from '@shared/ui/FormInput'
 import { APP_ROUTES } from '@app/routes'
+import { PASSWORD_MIN_LENGTH } from '@features/auth/model/auth.constants'
 
 const RegisterPage = () => {
   const navigate = useNavigate()
@@ -86,6 +87,7 @@ const RegisterPage = () => {
           value={formData.email}
           onChange={handleChange('email')}
           placeholder="usuario@correo.com"
+          autoComplete="email"
           required
         />
 
@@ -94,7 +96,9 @@ const RegisterPage = () => {
           type="password"
           value={formData.password}
           onChange={handleChange('password')}
-          placeholder="Mínimo 6 caracteres, con letra y número"
+          placeholder="Mínimo 12 caracteres, con letra y número"
+          autoComplete="new-password"
+          minLength={PASSWORD_MIN_LENGTH}
           required
         />
         <FormInput
@@ -103,6 +107,8 @@ const RegisterPage = () => {
           value={formData.passwordConfirmation}
           onChange={handleChange('passwordConfirmation')}
           placeholder="Repite tu contraseña"
+          autoComplete="new-password"
+          minLength={PASSWORD_MIN_LENGTH}
           required
         />
 
