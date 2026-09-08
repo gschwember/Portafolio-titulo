@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
@@ -14,8 +15,8 @@ def normalize_required_text(value, field_label):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, min_length=6)
-    password_confirmation = serializers.CharField(write_only=True, min_length=6)
+    password = serializers.CharField(write_only=True, min_length=settings.PASSWORD_MIN_LENGTH)
+    password_confirmation = serializers.CharField(write_only=True, min_length=settings.PASSWORD_MIN_LENGTH)
 
     class Meta:
         model = User
@@ -82,8 +83,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, min_length=6)
-    password_confirmation = serializers.CharField(write_only=True, min_length=6)
+    password = serializers.CharField(write_only=True, min_length=settings.PASSWORD_MIN_LENGTH)
+    password_confirmation = serializers.CharField(write_only=True, min_length=settings.PASSWORD_MIN_LENGTH)
 
     class Meta:
         model = User
@@ -120,8 +121,18 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, min_length=6, required=False, allow_blank=True)
-    password_confirmation = serializers.CharField(write_only=True, min_length=6, required=False, allow_blank=True)
+    password = serializers.CharField(
+        write_only=True,
+        min_length=settings.PASSWORD_MIN_LENGTH,
+        required=False,
+        allow_blank=True,
+    )
+    password_confirmation = serializers.CharField(
+        write_only=True,
+        min_length=settings.PASSWORD_MIN_LENGTH,
+        required=False,
+        allow_blank=True,
+    )
 
     class Meta:
         model = User
@@ -178,13 +189,12 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 class AuthResponseSerializer(serializers.Serializer):
     user = UserSerializer()
     access = serializers.CharField()
-    refresh = serializers.CharField()
 
     @staticmethod
     def build_for_user(user):
         refresh = RefreshToken.for_user(user)
-        return {
+        payload = {
             'user': UserSerializer(user).data,
             'access': str(refresh.access_token),
-            'refresh': str(refresh),
         }
+        return payload, str(refresh)

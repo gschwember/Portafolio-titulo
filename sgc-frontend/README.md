@@ -10,9 +10,10 @@ La base actual ya incluye:
 
 - Arquitectura por capas (`app`, `pages`, `widgets`, `features`, `entities`, `shared`).
 - Router por features.
-- Autenticacion integrada con backend (register/login).
+- Autenticacion integrada con backend (register/login/refresh/logout).
 - Guards de rutas para acceso publico/privado.
-- Sesion persistida en `localStorage` con JWT (`access`, `refresh`, `user`).
+- Access token mantenido en memoria y refresh token protegido por cookie `HttpOnly`.
+- Persistencia local limitada a los datos publicos del usuario.
 
 ## Stack
 
@@ -47,9 +48,11 @@ Aliases habilitados:
 
 1. Usuario se registra en `/register` (`POST /api/v1/auth/register`).
 2. Usuario inicia sesion en `/login` (`POST /api/v1/auth/login`).
-3. Frontend guarda `user`, `access`, `refresh` en almacenamiento local.
-4. Rutas privadas (`/resident/*`) quedan protegidas con `ProtectedRoute`.
-5. Rutas publicas (`/login`, `/register`) usan `PublicOnlyRoute`.
+3. Frontend mantiene el access token en memoria y solo persiste los datos del usuario.
+4. Al recargar, renueva la sesion mediante la cookie `HttpOnly` y programa la siguiente renovacion antes del vencimiento.
+5. Al cerrar sesion, el backend revoca el refresh token y elimina la cookie.
+6. Rutas privadas quedan protegidas con `ProtectedRoute` y permisos por rol.
+7. Rutas publicas (`/login`, `/register`) usan `PublicOnlyRoute`.
 
 ## Rutas frontend
 
@@ -96,8 +99,6 @@ npm run build
 - `src/pages/LoginPage.jsx`
 - `src/pages/RegisterPage.jsx`
 
-## Pendientes recomendados
+## Siguiente mejora recomendada
 
-1. Agregar logout visible en layout.
-2. Implementar refresh automatico de token al expirar access token.
-3. Activar guard por rol real cuando backend exponga campo `role`.
+Agregar pruebas de componentes y flujos completos para la autenticacion.

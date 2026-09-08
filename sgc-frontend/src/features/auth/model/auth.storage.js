@@ -1,6 +1,6 @@
-import { AUTH_STORAGE_KEY } from './auth.constants'
+import { AUTH_STORAGE_KEY, AUTH_STORAGE_VERSION } from './auth.constants'
 
-const loadAuthSession = () => {
+const loadAuthUser = () => {
   try {
     const rawValue = localStorage.getItem(AUTH_STORAGE_KEY)
     if (!rawValue) {
@@ -9,24 +9,28 @@ const loadAuthSession = () => {
 
     const parsed = JSON.parse(rawValue)
 
-    // Limpia sesiones obsoletas de cuentas pendientes de aprobacion.
-    if (parsed?.user?.is_active === false) {
+    if (!parsed?.user || parsed.user.is_active === false) {
       localStorage.removeItem(AUTH_STORAGE_KEY)
       return null
     }
 
-    return parsed
+    saveAuthUser(parsed.user)
+    return parsed.user
   } catch {
+    localStorage.removeItem(AUTH_STORAGE_KEY)
     return null
   }
 }
 
-const saveAuthSession = (session) => {
-  localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session))
+const saveAuthUser = (user) => {
+  localStorage.setItem(
+    AUTH_STORAGE_KEY,
+    JSON.stringify({ version: AUTH_STORAGE_VERSION, user }),
+  )
 }
 
-const clearAuthSession = () => {
+const clearAuthUser = () => {
   localStorage.removeItem(AUTH_STORAGE_KEY)
 }
 
-export { clearAuthSession, loadAuthSession, saveAuthSession }
+export { clearAuthUser, loadAuthUser, saveAuthUser }

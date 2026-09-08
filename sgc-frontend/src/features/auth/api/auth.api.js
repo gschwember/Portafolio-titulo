@@ -13,11 +13,15 @@ const registerRequest = async ({ email, rut, password, passwordConfirmation, fir
 }
 
 const loginRequest = async ({ email, password }) => {
-  return apiPost(AUTH_ENDPOINTS.login, { email, password })
+  return apiPost(AUTH_ENDPOINTS.login, { email, password }, { credentials: 'include' })
 }
 
-const refreshTokenRequest = async (refresh) => {
-  return apiPost(AUTH_ENDPOINTS.refresh, { refresh })
+const refreshTokenRequest = async () => {
+  return apiPost(AUTH_ENDPOINTS.refresh, {}, { credentials: 'include' })
 }
 
-export { loginRequest, refreshTokenRequest, registerRequest }
+const logoutRequest = async () => {
+  return apiPost(AUTH_ENDPOINTS.logout, {}, { credentials: 'include' })
+}
+
+export { loginRequest, logoutRequest, refreshTokenRequest, registerRequest }

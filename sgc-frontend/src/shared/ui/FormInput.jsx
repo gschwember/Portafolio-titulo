@@ -11,6 +11,8 @@ const FormInput = ({
   error = '',
   disabled = false,
   required = false,
+  autoComplete,
+  minLength,
 }) => {
   const generatedId = useId()
   const safeLabel = label?.replace(/\s+/g, '-').toLowerCase()
@@ -39,6 +41,8 @@ const FormInput = ({
           onChange={onChange}
           disabled={disabled}
           required={required}
+          autoComplete={autoComplete}
+          minLength={minLength}
           aria-invalid={Boolean(error)}
           className={`input-base ${isPasswordType ? 'pr-11' : ''} ${error ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-red-500/30' : ''}`}
         />

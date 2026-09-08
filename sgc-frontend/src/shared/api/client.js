@@ -59,6 +59,7 @@ const request = async (path, options = {}) => {
   try {
     const response = await fetch(createUrl(path), {
       method: options.method ?? 'GET',
+      credentials: options.credentials ?? 'same-origin',
       headers: {
         ...(isFormDataBody ? {} : { 'Content-Type': 'application/json' }),
         ...(options.accessToken ? { Authorization: `Bearer ${options.accessToken}` } : {}),

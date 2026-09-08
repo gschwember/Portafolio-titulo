@@ -19,7 +19,7 @@ El sistema ofrece experiencias y permisos diferenciados para cuatro perfiles: **
 
 ## Funcionalidades principales
 
-- Autenticación con JWT, persistencia de sesión y protección por rol y condominio.
+- Autenticación con access token en memoria, refresh token `HttpOnly` y protección por rol y condominio.
 - Administración de condominios, unidades y asignaciones de residentes.
 - Generación y cierre de periodos de gastos comunes.
 - Registro, validación e historial de pagos y comprobantes.
@@ -46,7 +46,7 @@ El frontend sigue una organización por capas inspirada en Feature-Sliced Design
 | --- | --- |
 | Frontend | React 19, Vite 8, React Router 7, Tailwind CSS 3 |
 | Backend | Python, Django 6, Django REST Framework |
-| Seguridad | JWT con SimpleJWT, membresías por condominio, CORS y CSRF |
+| Seguridad | JWT con cookie `HttpOnly`, límite de intentos, membresías por condominio, CORS y CSRF |
 | Datos | SQLite para desarrollo, PostgreSQL para producción |
 | Calidad | ESLint, Pytest, Pytest-Django y GitHub Actions |
 
@@ -132,7 +132,7 @@ Cada `push` y `pull request` ejecuta estas verificaciones automáticamente media
 
 ## Estado del proyecto
 
-El flujo principal está implementado y el backend cuenta con **22 pruebas automatizadas**. Los datos operativos se filtran según las membresías activas de cada usuario. Como evolución futura se considera ampliar la cobertura del frontend, incorporar recuperación de contraseña y añadir observabilidad para producción.
+El flujo principal está implementado y el backend cuenta con **29 pruebas automatizadas**. Los datos operativos se filtran según las membresías activas de cada usuario. Como evolución futura se considera ampliar la cobertura del frontend, incorporar recuperación de contraseña y añadir observabilidad para producción.
 
 ## Autor
 
