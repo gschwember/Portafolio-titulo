@@ -10,7 +10,7 @@ Implementado:
 
 - Settings por entorno (`base`, `dev`, `prod`).
 - Usuario custom autenticado por email.
-- JWT (SimpleJWT) para login seguro.
+- JWT (SimpleJWT) con access token temporal y refresh token en cookie `HttpOnly`.
 - Endpoints de auth versionados (`/api/v1/auth/*`).
 - Membresias y aislamiento de datos por condominio.
 - CORS y CSRF configurados para frontend local.
@@ -76,7 +76,13 @@ Copy-Item .env.example .env
 - `POST /api/v1/auth/register`
 - `POST /api/v1/auth/login`
 - `POST /api/v1/auth/token/refresh`
+- `POST /api/v1/auth/logout`
 - `GET /api/v1/health`
+
+El login devuelve el usuario y el access token. El refresh token no se incluye en
+el JSON: se guarda en una cookie `HttpOnly`, se usa para renovar la sesion y se
+revoca al cerrar sesion. El endpoint de login admite cinco intentos por minuto
+para una misma combinacion de cuenta y origen.
 
 ## Payloads de integracion
 
@@ -112,6 +118,8 @@ DJANGO_DEBUG=True
 DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
 DJANGO_CORS_ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 DJANGO_CSRF_TRUSTED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+AUTH_REFRESH_COOKIE_SECURE=False
+AUTH_REFRESH_COOKIE_SAMESITE=Lax
 
 DB_ENGINE=django.db.backends.sqlite3
 DB_NAME=db.sqlite3
@@ -179,4 +187,4 @@ Notas de acceso:
 - La API heredada `/api/v1/reservations/` queda limitada a `superadmin` mientras se completa su retiro.
 
 Estado de pruebas:
-- Suite backend: `22 passed`.
+- Suite backend: `29 passed`.
