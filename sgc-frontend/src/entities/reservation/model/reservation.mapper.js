@@ -26,13 +26,14 @@ const toReservationStatusBadge = (value) => reservationStatusBadgeMap[value] || 
 
 const mapReservationToRow = (reservation) => {
   const extraData = reservation.extra_data || {}
+  const commonSpaceLabel = reservation.common_space_name || toCommonSpaceLabel(reservation.common_space)
 
   return {
     id: reservation.id,
     commonSpace: reservation.common_space,
-    commonSpaceLabel: toCommonSpaceLabel(reservation.common_space),
-    requesterName: reservation.requester_name,
-    requesterRole: reservation.requester_role,
+    commonSpaceLabel,
+    requesterName: reservation.user_name || reservation.requester_name,
+    requesterRole: reservation.user_role || reservation.requester_role,
     reservationDate: reservation.reservation_date,
     startTime: reservation.start_time,
     endTime: reservation.end_time,

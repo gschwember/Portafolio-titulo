@@ -3,7 +3,7 @@ import DashboardLayout from '@shared/ui/DashboardLayout'
 import DataTable from '@shared/ui/DataTable'
 import useAuth from '@features/auth/hooks/useAuth'
 import { conserjeNavItems } from '@features/conserje-dashboard/data/conserjeDashboardData'
-import { listReservationsRequest } from '@entities/reservation/api/reservation.api'
+import { listTenantReservationsRequest } from '@features/condominium-management/api/billing.api'
 import { mapReservationToRow, toReservationStatusBadge } from '@entities/reservation/model/reservation.mapper'
 
 const ConserjeReservationsPage = () => {
@@ -21,7 +21,7 @@ const ConserjeReservationsPage = () => {
     setError('')
 
     try {
-      const response = await listReservationsRequest(accessToken)
+      const response = await listTenantReservationsRequest(accessToken)
       setReservations(Array.isArray(response) ? response.map(mapReservationToRow) : [])
     } catch (loadError) {
       setError(loadError.message || 'No fue posible cargar las reservas.')

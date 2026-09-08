@@ -20,6 +20,42 @@ class Condominium(models.Model):
         return self.name
 
 
+class CondominiumMembership(models.Model):
+    class Role(models.TextChoices):
+        ADMIN = User.Role.ADMIN, 'Administrador'
+        CONSERJE = User.Role.CONSERJE, 'Conserje'
+        RESIDENTE = User.Role.RESIDENTE, 'Residente'
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='condominium_memberships',
+    )
+    condominium = models.ForeignKey(
+        Condominium,
+        on_delete=models.CASCADE,
+        related_name='memberships',
+    )
+    role = models.CharField(max_length=20, choices=Role.choices)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('condominium_id', 'role', 'user_id')
+        constraints = [
+            models.UniqueConstraint(
+                fields=('user', 'condominium'),
+                name='unique_user_membership_per_condominium',
+            ),
+        ]
+        indexes = [
+            models.Index(fields=('user', 'is_active'), name='membership_user_active_idx'),
+        ]
+
+    def __str__(self):
+        return f'{self.user.email} - {self.condominium.name} ({self.role})'
+
+
 class Unit(models.Model):
     condominium = models.ForeignKey(Condominium, on_delete=models.CASCADE, related_name='units')
     number = models.CharField(max_length=30)
@@ -51,6 +87,18 @@ class ResidentAssignment(models.Model):
 
     def __str__(self):
         return f'{self.user.email} -> {self.unit}'
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.is_active:
+            CondominiumMembership.objects.update_or_create(
+                user=self.user,
+                condominium=self.unit.condominium,
+                defaults={
+                    'role': CondominiumMembership.Role.RESIDENTE,
+                    'is_active': True,
+                },
+            )
 
 
 class BillingPeriod(models.Model):

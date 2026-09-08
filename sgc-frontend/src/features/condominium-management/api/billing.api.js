@@ -9,6 +9,7 @@ const BILLING_ENDPOINTS = {
   payments: '/v1/billing/payments/',
   paymentReceipts: '/v1/billing/payment-receipts/',
   commonSpaces: '/v1/billing/common-spaces/',
+  reservations: '/v1/billing/reservations/',
   users: '/v1/users/',
   meterReadings: '/v1/billing/meter-readings/',
 }
@@ -39,6 +40,10 @@ const deleteResidentAssignmentRequest = (assignmentId, accessToken) =>
 
 const listCommonSpacesRequest = (accessToken) => apiGet(BILLING_ENDPOINTS.commonSpaces, { accessToken })
 const createCommonSpaceRequest = (payload, accessToken) => apiPost(BILLING_ENDPOINTS.commonSpaces, payload, { accessToken })
+const listTenantReservationsRequest = (accessToken, params = {}) =>
+  apiGet(`${BILLING_ENDPOINTS.reservations}${buildQuery(params)}`, { accessToken })
+const createTenantReservationRequest = (payload, accessToken) =>
+  apiPost(BILLING_ENDPOINTS.reservations, payload, { accessToken })
 
 const listBillingPeriodsRequest = (accessToken, params = {}) =>
   apiGet(`${BILLING_ENDPOINTS.billingPeriods}${buildQuery(params)}`, { accessToken })
@@ -94,6 +99,7 @@ export {
   listPaymentReceiptsRequest,
   listPaymentsRequest,
   listResidentAssignmentsRequest,
+  listTenantReservationsRequest,
   listUnitsRequest,
   listUsersRequest,
   patchPaymentRequest,
@@ -101,4 +107,5 @@ export {
   createMeterReadingRequest,
   closeBillingPeriodRequest,
   createBillingPeriodRequest,
+  createTenantReservationRequest,
 }

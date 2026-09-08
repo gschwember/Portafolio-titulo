@@ -7,6 +7,7 @@ from .views import (
     CommonExpenseViewSet,
     CommonSpaceViewSet,
     CondominiumViewSet,
+    CondominiumMembershipViewSet,
     PaymentReceiptViewSet,
     PaymentViewSet,
     ReservationViewSet,
@@ -16,6 +17,7 @@ from .views import (
 
 router = DefaultRouter()
 router.register('condominiums', CondominiumViewSet, basename='billing-condominiums')
+router.register('memberships', CondominiumMembershipViewSet, basename='billing-memberships')
 router.register('units', UnitViewSet, basename='billing-units')
 router.register('resident-assignments', ResidentAssignmentViewSet, basename='billing-resident-assignments')
 router.register('billing-periods', BillingPeriodViewSet, basename='billing-periods')
