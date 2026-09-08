@@ -4,10 +4,10 @@ import DataTable from '@shared/ui/DataTable'
 import useAuth from '@features/auth/hooks/useAuth'
 import { residentNavItems } from '@features/resident-dashboard/data/dashboardData'
 import {
-  createReservationRequest,
+  createTenantReservationRequest,
   listCommonSpacesRequest,
-  listReservationsRequest,
-} from '@entities/reservation/api/reservation.api'
+  listTenantReservationsRequest,
+} from '@features/condominium-management/api/billing.api'
 import { mapReservationToRow, toReservationStatusBadge } from '@entities/reservation/model/reservation.mapper'
 
 const timeSlotOptions = [
@@ -31,7 +31,6 @@ const ResidentReservationsPage = () => {
     spaceCode: '',
     date: '',
     timeSlot: timeSlotOptions[0].value,
-    notes: '',
   })
 
   const loadData = useCallback(async () => {
@@ -43,7 +42,7 @@ const ResidentReservationsPage = () => {
     try {
       const [spacesResponse, reservationsResponse] = await Promise.all([
         listCommonSpacesRequest(accessToken),
-        listReservationsRequest(accessToken),
+        listTenantReservationsRequest(accessToken),
       ])
 
       setCommonSpaces(Array.isArray(spacesResponse) ? spacesResponse : [])
@@ -73,17 +72,12 @@ const ResidentReservationsPage = () => {
     setSuccess('')
 
     try {
-      const createdReservation = await createReservationRequest(
+      const createdReservation = await createTenantReservationRequest(
         {
-          common_space: formData.spaceCode,
-          requester_name: realName,
-          requester_role: 'residente',
+          common_space: Number(formData.spaceCode),
           reservation_date: formData.date,
           start_time: startTime,
           end_time: endTime,
-          status: 'pending',
-          notes: formData.notes.trim(),
-          extra_data: {},
         },
         accessToken,
       )
@@ -93,7 +87,6 @@ const ResidentReservationsPage = () => {
         spaceCode: '',
         date: '',
         timeSlot: timeSlotOptions[0].value,
-        notes: '',
       })
       setSuccess('Solicitud enviada correctamente. Quedara pendiente de revision.')
     } catch (submitError) {
@@ -150,8 +143,8 @@ const ResidentReservationsPage = () => {
                   >
                     <option value="">Selecciona...</option>
                     {commonSpaces.map((space) => (
-                      <option key={space.id} value={space.code}>
-                        {space.name} (Max: {space.capacity} pax)
+                      <option key={space.id} value={space.id}>
+                        {space.name}
                       </option>
                     ))}
                   </select>
@@ -183,17 +176,6 @@ const ResidentReservationsPage = () => {
                       </option>
                     ))}
                   </select>
-                </div>
-
-                <div>
-                  <label className="mb-1 block text-sm font-semibold text-stone-700">Observaciones</label>
-                  <input
-                    type="text"
-                    value={formData.notes}
-                    onChange={(event) => setFormData((previous) => ({ ...previous, notes: event.target.value }))}
-                    className="input-base"
-                    placeholder="Opcional"
-                  />
                 </div>
 
                 <div className="md:col-span-2">

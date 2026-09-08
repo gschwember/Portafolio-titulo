@@ -12,8 +12,9 @@ Implementado:
 - Usuario custom autenticado por email.
 - JWT (SimpleJWT) para login seguro.
 - Endpoints de auth versionados (`/api/v1/auth/*`).
+- Membresias y aislamiento de datos por condominio.
 - CORS y CSRF configurados para frontend local.
-- Pruebas basicas de autenticacion.
+- Pruebas de autenticacion, permisos y aislamiento entre condominios.
 
 ## Stack
 
@@ -40,6 +41,13 @@ sgc-backend/
     models.py
     serializers.py
     urls.py
+    views.py
+    tests/
+  billing/
+    access.py
+    models.py
+    serializers.py
+    tenant_urls.py
     views.py
     tests/
   requirements/
@@ -126,12 +134,6 @@ DB_PORT=
 - Comando: `.\venv\Scripts\python manage.py seed_test_data`
 - Opcion de reinicio de datos: `.\venv\Scripts\python manage.py seed_test_data --reset`
 
-## Pendientes recomendados
-
-1. Endpoint `GET /api/v1/auth/me`.
-2. Modelo de roles (`superadmin`, `admin`, `conserje`, `residente`).
-3. Modulos de negocio: condominios, unidades, medidores, pagos, reservas y reportes.
-
 ## MER de Base de Datos
 
 - Documento completo: docs/MER.md
@@ -143,6 +145,7 @@ Se actualizo el app `billing` para reflejar la estructura del MER del proyecto.
 
 Modelos implementados:
 - `Condominium`
+- `CondominiumMembership`
 - `Unit`
 - `ResidentAssignment`
 - `BillingPeriod`
@@ -162,10 +165,18 @@ Endpoints base (`/api/v1/billing/`):
 - `payment-receipts/`
 - `common-spaces/`
 - `reservations/`
+- `meter-readings/`
+
+Los mismos recursos tambien se pueden consultar con alcance explicito mediante
+`/api/v1/condominiums/{id}/`. Esta variante incluye `members/`, `units/`,
+`billing-periods/`, `payments/`, `reservations/` y `meter-readings/`, entre otros.
 
 Notas de acceso:
-- `admin`/`superadmin`: gestion completa de entidades.
-- `residente`: acceso acotado a su informacion (gastos comunes por sus unidades, pagos, comprobantes y reservas propias).
+- `superadmin`: acceso global.
+- `admin`: gestiona solamente los condominios donde tiene una membresia activa de administrador.
+- `conserje`: consulta reservas y registra lecturas dentro de sus condominios asignados.
+- `residente`: consulta gastos, pagos, comprobantes, reservas y lecturas asociados a sus unidades.
+- La API heredada `/api/v1/reservations/` queda limitada a `superadmin` mientras se completa su retiro.
 
 Estado de pruebas:
-- Suite backend: `17 passed`.
+- Suite backend: `22 passed`.
