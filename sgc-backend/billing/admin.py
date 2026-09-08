@@ -5,6 +5,7 @@ from .models import (
     CommonExpense,
     CommonSpace,
     Condominium,
+    CondominiumMembership,
     Payment,
     PaymentReceipt,
     Reservation,
@@ -14,6 +15,7 @@ from .models import (
 
 
 admin.site.register(Condominium)
+admin.site.register(CondominiumMembership)
 admin.site.register(Unit)
 admin.site.register(ResidentAssignment)
 admin.site.register(BillingPeriod)

@@ -12,6 +12,7 @@ from billing.models import (
     CommonExpense,
     CommonSpace,
     Condominium,
+    CondominiumMembership,
     Payment,
     Reservation as BillingReservation,
     ResidentAssignment,
@@ -273,6 +274,19 @@ class Command(BaseCommand):
                 "is_active": True,
             },
         )
+
+        memberships_seed = [
+            (users['admin@sgc.cl'], condo_central, CondominiumMembership.Role.ADMIN),
+            (users['admin@sgc.cl'], condo_oriente, CondominiumMembership.Role.ADMIN),
+            (users['conserje@sgc.cl'], condo_central, CondominiumMembership.Role.CONSERJE),
+            (users['conserje2@sgc.cl'], condo_oriente, CondominiumMembership.Role.CONSERJE),
+        ]
+        for user, condominium, role in memberships_seed:
+            CondominiumMembership.objects.update_or_create(
+                user=user,
+                condominium=condominium,
+                defaults={'role': role, 'is_active': True},
+            )
 
         unit_101, _ = Unit.objects.update_or_create(
             condominium=condo_central,
