@@ -1,30 +1,36 @@
-from rest_framework import permissions, viewsets, status
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from django.utils import timezone
-from .models import BillingPeriod, CommonExpense, MeterReading, Unit, Condominium
-from users.models import User
-from .serializers import MeterReadingSerializer
 import calendar
 import datetime
 
+from django.utils import timezone
+from rest_framework import permissions, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound
+from rest_framework.response import Response
+
+from users.models import User
+
+from .access import TENANT_ADMIN_ROLES, accessible_condominium_ids, has_condominium_access
 from .models import (
     BillingPeriod,
     CommonExpense,
     CommonSpace,
     Condominium,
+    CondominiumMembership,
+    MeterReading,
     Payment,
     PaymentReceipt,
     Reservation,
     ResidentAssignment,
     Unit,
 )
-from .permissions import IsAdminOrSuperAdmin, IsBackofficeRole
+from .permissions import IsAdminOrSuperAdmin, IsBackofficeRole, IsFinancialRole
 from .serializers import (
     BillingPeriodSerializer,
     CommonExpenseSerializer,
     CommonSpaceSerializer,
     CondominiumSerializer,
+    CondominiumMembershipSerializer,
+    MeterReadingSerializer,
     PaymentReceiptSerializer,
     PaymentSerializer,
     ReservationSerializer,
@@ -33,17 +39,67 @@ from .serializers import (
 )
 
 
-class CondominiumViewSet(viewsets.ModelViewSet):
+class TenantScopedQuerysetMixin:
+    condominium_lookup = 'condominium_id'
+    tenant_access_roles = None
+
+    def initial(self, request, *args, **kwargs):
+        super().initial(request, *args, **kwargs)
+        condominium_id = self.kwargs.get('condominium_id')
+        if condominium_id and not has_condominium_access(
+            request.user,
+            condominium_id,
+            roles=self.tenant_access_roles,
+        ):
+            raise NotFound('Condominio no encontrado.')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        condominium_ids = accessible_condominium_ids(
+            self.request.user,
+            roles=self.tenant_access_roles,
+        )
+        condominium_id = self.kwargs.get('condominium_id')
+
+        if condominium_id:
+            return queryset.filter(**{self.condominium_lookup: condominium_id})
+        return queryset.filter(**{f'{self.condominium_lookup}__in': condominium_ids})
+
+
+class CondominiumViewSet(TenantScopedQuerysetMixin, viewsets.ModelViewSet):
     queryset = Condominium.objects.all()
     serializer_class = CondominiumSerializer
+    condominium_lookup = 'id'
     
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             return [permissions.IsAuthenticated()]
         return [IsAdminOrSuperAdmin()]
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.action in {'update', 'partial_update', 'destroy'} and self.request.user.role != User.Role.SUPERADMIN:
+            condominium_ids = accessible_condominium_ids(
+                self.request.user,
+                roles=TENANT_ADMIN_ROLES,
+            )
+            return queryset.filter(id__in=condominium_ids)
+        return queryset
 
-class UnitViewSet(viewsets.ModelViewSet):
+    def perform_create(self, serializer):
+        condominium = serializer.save()
+        if self.request.user.role == User.Role.ADMIN:
+            CondominiumMembership.objects.update_or_create(
+                user=self.request.user,
+                condominium=condominium,
+                defaults={
+                    'role': CondominiumMembership.Role.ADMIN,
+                    'is_active': True,
+                },
+            )
+
+
+class UnitViewSet(TenantScopedQuerysetMixin, viewsets.ModelViewSet):
     queryset = Unit.objects.select_related('condominium').all()
     serializer_class = UnitSerializer
     
@@ -53,16 +109,26 @@ class UnitViewSet(viewsets.ModelViewSet):
         return [IsAdminOrSuperAdmin()]
 
 
-class ResidentAssignmentViewSet(viewsets.ModelViewSet):
+class CondominiumMembershipViewSet(TenantScopedQuerysetMixin, viewsets.ModelViewSet):
+    queryset = CondominiumMembership.objects.select_related('user', 'condominium').all()
+    serializer_class = CondominiumMembershipSerializer
+    permission_classes = (IsAdminOrSuperAdmin,)
+    tenant_access_roles = TENANT_ADMIN_ROLES
+
+
+class ResidentAssignmentViewSet(TenantScopedQuerysetMixin, viewsets.ModelViewSet):
     queryset = ResidentAssignment.objects.select_related('user', 'unit', 'unit__condominium').all()
     serializer_class = ResidentAssignmentSerializer
     permission_classes = (IsAdminOrSuperAdmin,)
+    condominium_lookup = 'unit__condominium_id'
+    tenant_access_roles = TENANT_ADMIN_ROLES
 
 
-class BillingPeriodViewSet(viewsets.ModelViewSet):
+class BillingPeriodViewSet(TenantScopedQuerysetMixin, viewsets.ModelViewSet):
     queryset = BillingPeriod.objects.select_related('condominium').all()
     serializer_class = BillingPeriodSerializer
     permission_classes = (IsAdminOrSuperAdmin,)
+    tenant_access_roles = TENANT_ADMIN_ROLES
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -135,15 +201,16 @@ class BillingPeriodViewSet(viewsets.ModelViewSet):
         }, status=status.HTTP_201_CREATED)
 
 
-class CommonExpenseViewSet(viewsets.ModelViewSet):
+class CommonExpenseViewSet(TenantScopedQuerysetMixin, viewsets.ModelViewSet):
     queryset = CommonExpense.objects.select_related('period', 'period__condominium', 'unit').all()
     serializer_class = CommonExpenseSerializer
+    condominium_lookup = 'unit__condominium_id'
 
     def get_permissions(self):
         if self.action in {'create', 'update', 'partial_update', 'destroy'}:
             permission_classes = (IsAdminOrSuperAdmin,)
         else:
-            permission_classes = (permissions.IsAuthenticated,)
+            permission_classes = (IsFinancialRole,)
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -168,15 +235,16 @@ class CommonExpenseViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class PaymentViewSet(viewsets.ModelViewSet):
+class PaymentViewSet(TenantScopedQuerysetMixin, viewsets.ModelViewSet):
     queryset = Payment.objects.select_related('period', 'unit').all()
     serializer_class = PaymentSerializer
+    condominium_lookup = 'unit__condominium_id'
 
     def get_permissions(self):
         if self.action in {'update', 'partial_update', 'destroy'}:
             permission_classes = (IsAdminOrSuperAdmin,)
         else:
-            permission_classes = (permissions.IsAuthenticated,)
+            permission_classes = (IsFinancialRole,)
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -201,15 +269,16 @@ class PaymentViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class PaymentReceiptViewSet(viewsets.ModelViewSet):
+class PaymentReceiptViewSet(TenantScopedQuerysetMixin, viewsets.ModelViewSet):
     queryset = PaymentReceipt.objects.select_related('payment', 'payment__unit', 'user').all()
     serializer_class = PaymentReceiptSerializer
+    condominium_lookup = 'payment__unit__condominium_id'
 
     def get_permissions(self):
         if self.action in {'update', 'partial_update', 'destroy'}:
             permission_classes = (IsAdminOrSuperAdmin,)
         else:
-            permission_classes = (permissions.IsAuthenticated,)
+            permission_classes = (IsFinancialRole,)
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -227,7 +296,7 @@ class PaymentReceiptViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class CommonSpaceViewSet(viewsets.ModelViewSet):
+class CommonSpaceViewSet(TenantScopedQuerysetMixin, viewsets.ModelViewSet):
     queryset = CommonSpace.objects.select_related('condominium').all()
     serializer_class = CommonSpaceSerializer
 
@@ -246,9 +315,10 @@ class CommonSpaceViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class ReservationViewSet(viewsets.ModelViewSet):
+class ReservationViewSet(TenantScopedQuerysetMixin, viewsets.ModelViewSet):
     queryset = Reservation.objects.select_related('common_space', 'common_space__condominium', 'user').all()
     serializer_class = ReservationSerializer
+    condominium_lookup = 'common_space__condominium_id'
 
     def get_permissions(self):
         if self.action in {'update', 'partial_update'}:
@@ -279,7 +349,24 @@ class ReservationViewSet(viewsets.ModelViewSet):
 
         return queryset
 
-class MeterReadingViewSet(viewsets.ModelViewSet):
-    queryset = MeterReading.objects.all()
+class MeterReadingViewSet(TenantScopedQuerysetMixin, viewsets.ModelViewSet):
+    queryset = MeterReading.objects.select_related('unit', 'unit__condominium').all()
     serializer_class = MeterReadingSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    condominium_lookup = 'unit__condominium_id'
+
+    def get_permissions(self):
+        if self.action in {'create', 'update', 'partial_update', 'destroy'}:
+            permission_classes = (IsBackofficeRole,)
+        else:
+            permission_classes = (permissions.IsAuthenticated,)
+        return [permission() for permission in permission_classes]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.role == User.Role.RESIDENTE:
+            unit_ids = ResidentAssignment.objects.filter(
+                user=self.request.user,
+                is_active=True,
+            ).values_list('unit_id', flat=True)
+            queryset = queryset.filter(unit_id__in=unit_ids)
+        return queryset

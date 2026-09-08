@@ -3,7 +3,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from .permissions import IsAdminOrSuperAdmin
+from billing.access import TENANT_ADMIN_ROLES, accessible_condominium_ids
+
+from .permissions import IsAdminOrSuperAdmin, IsSuperAdmin
 from .models import User
 from .serializers import (
     AuthResponseSerializer,
@@ -13,6 +15,22 @@ from .serializers import (
     UserSerializer,
     UserUpdateSerializer,
 )
+
+
+class TenantUserQuerysetMixin:
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.role == User.Role.SUPERADMIN:
+            return queryset
+
+        condominium_ids = accessible_condominium_ids(
+            self.request.user,
+            roles=TENANT_ADMIN_ROLES,
+        )
+        return queryset.filter(
+            condominium_memberships__condominium_id__in=condominium_ids,
+            condominium_memberships__is_active=True,
+        ).distinct()
 
 
 class RegisterAPIView(APIView):
@@ -45,9 +63,12 @@ class RefreshTokenAPIView(TokenRefreshView):
     permission_classes = (permissions.AllowAny,)
 
 
-class UserListCreateAPIView(generics.ListCreateAPIView):
-    permission_classes = (IsAdminOrSuperAdmin,)
+class UserListCreateAPIView(TenantUserQuerysetMixin, generics.ListCreateAPIView):
     queryset = User.objects.all().order_by('id')
+
+    def get_permissions(self):
+        permission_classes = (IsSuperAdmin,) if self.request.method == 'POST' else (IsAdminOrSuperAdmin,)
+        return [permission() for permission in permission_classes]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -55,9 +76,16 @@ class UserListCreateAPIView(generics.ListCreateAPIView):
         return UserSerializer
 
 
-class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAdminOrSuperAdmin,)
+class UserRetrieveUpdateDestroyAPIView(TenantUserQuerysetMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
+
+    def get_permissions(self):
+        permission_classes = (
+            (IsAdminOrSuperAdmin,)
+            if self.request.method == 'GET'
+            else (IsSuperAdmin,)
+        )
+        return [permission() for permission in permission_classes]
 
     def get_serializer_class(self):
         if self.request.method in ['PUT', 'PATCH']:
