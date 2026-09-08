@@ -3,10 +3,13 @@
 import os
 import sys
 
+from config.environment import get_settings_module
+
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.dev')
+    if 'DJANGO_SETTINGS_MODULE' not in os.environ:
+        os.environ['DJANGO_SETTINGS_MODULE'] = get_settings_module()
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
