@@ -4,6 +4,8 @@
 
 Plataforma full stack para centralizar la administración financiera, operativa y comunitaria de condominios.
 
+[Ver demo en vivo](https://sgc-condominios.vercel.app) · [Explorar documentación](#documentación-técnica)
+
 [![CI](https://github.com/gschwember/Portafolio-titulo/actions/workflows/ci.yml/badge.svg)](https://github.com/gschwember/Portafolio-titulo/actions/workflows/ci.yml)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-6-092E20?logo=django&logoColor=white)
