@@ -56,7 +56,7 @@ El frontend sigue una organización por capas inspirada en Feature-Sliced Design
 
 ### Requisitos
 
-- Node.js 22 o superior
+- Node.js 24 LTS (consulta `.nvmrc` para la versión exacta)
 - Python 3.12 o superior
 - Git
 
